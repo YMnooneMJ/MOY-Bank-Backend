@@ -10,8 +10,7 @@ const userSchema = new mongoose.Schema(
 
     username: {
       type: String,
-      required: true,
-      unique: true, 
+      unique: true,
       trim: true,
       lowercase: true,
       validate: {
@@ -27,7 +26,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      trim: true, 
+      trim: true,
       lowercase: true,
     },
 
@@ -64,6 +63,11 @@ const userSchema = new mongoose.Schema(
         },
         message: (props) => `${props.value} is not a valid phone number!`,
       },
+    },
+
+    avatar: {
+      type: String,
+      default: "",
     },
 
     accountNumber: {

@@ -2,12 +2,14 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/userModels.js";
 
-//Generate JWT Token
+// Generate JWT Token
 const generateToken = (userId) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
-// Register a new user
+// @desc    Register new user
+// @route   POST /api/auth/register
+// @access  Public
 export const registerUser = async (req, res) => {
   try {
     const {
@@ -18,9 +20,9 @@ export const registerUser = async (req, res) => {
       password,
       phoneNumber,
       accountNumber,
-    } = req.bode;
+    } = req.body;
 
-    // check if user already exists
+    // Check if user already exists
     const existingUser = await User.findOne({
       $or: [{ email }, { username }, { phoneNumber }],
     });
@@ -28,10 +30,9 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    //Hash password
+    // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedpassword = await bcrypt.hash(password, salt);
-    User.password = hashedpassword;
 
     // Create new user
     const newUser = await User.create({
@@ -42,6 +43,7 @@ export const registerUser = async (req, res) => {
       password: hashedpassword,
       phoneNumber,
       accountNumber,
+      role: "user",
     });
 
     // Generate token
@@ -57,32 +59,38 @@ export const registerUser = async (req, res) => {
         balance: newUser.balance,
         role: newUser.role,
       },
-      token, // JWT token
+      token,
     });
   } catch (err) {
     res.status(500).json({
-      message: "Resgistration failed",
+      message: "Registration failed",
       error: err.message,
     });
   }
 };
 
-// Login user
+// @desc    Login user
+// @route   POST /api/auth/login
+// @access  Public
 export const loginUser = async (req, res) => {
   try {
+    console.log("Login body:", req.body); // Add this line
     const { emailorUsername, password } = req.body;
 
-    // Check if user exists
+    // Find user by email or username
     const user = await User.findOne({
       $or: [{ email: emailorUsername }, { username: emailorUsername }],
-    }).select("+password"); //include password for check
+    }).select("+password");
+    
+    console.log("User found:", user);
 
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch)
-      return res.status(400).josn({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Invalid credentials" });
 
     const token = generateToken(user._id);
 
@@ -90,8 +98,7 @@ export const loginUser = async (req, res) => {
       message: "Login successful",
       user: {
         id: user._id,
-        fullName: user,
-        fullName,
+        fullName: user.fullName,
         username: user.username,
         email: user.email,
         balance: user.balance,

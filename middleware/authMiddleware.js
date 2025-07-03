@@ -4,7 +4,7 @@ import User from "../models/userModels.js";
 const protect = async (req, res, next) => {
   let token;
 
-  // Check fro Authorization header with Bearer token
+  // Check for Authorization header with Bearer token
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer") // check if the header starts with "Bearer"
@@ -19,13 +19,23 @@ const protect = async (req, res, next) => {
       // Get user from token
       req.user = await User.findById(decoded.userId).select("-password"); //Exclude password from user data
 
+      if (!req.user) {
+        return res.status(401).json({ message: "User not found." });
+      }
+
       next(); // continue to the next middleware or route handler
     } catch (err) {
-        return res.status(401).json({
-            message: "Not authorized, token failed",
-            error: err.message
-        })
+      return res.status(401).json({
+        message: "Not authorized, token failed",
+        error: err.message,
+      });
     }
+  } else {
+    // Missing or invalid token
+    return res.status(401).json({
+      message: "Not authorized, no token provided",
+    });
   }
 };
+
 export default protect;
