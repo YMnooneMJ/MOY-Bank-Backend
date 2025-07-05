@@ -28,8 +28,9 @@ const server = http.createServer(app);
 // Initialize Socket.IO server
 const io = new Server(server, {
   cors: {
-    origin: "*", 
+    origin: "*",
     methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 
@@ -55,7 +56,7 @@ dbConnection();
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
-app.use("/uploads", express.static("uploads")); 
+app.use("/uploads", express.static("uploads"));
 
 // Routes
 app.get("/", (req, res) => res.send("Welcome to MOY-Bank API"));
@@ -63,7 +64,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/transactions", transactionRoutes);
-app.use("/api/support", supportRoutes); 
+app.use("/api/support", supportRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/password", passwordRoutes);
 
