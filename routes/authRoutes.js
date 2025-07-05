@@ -1,6 +1,10 @@
 import express from "express";
 import { body } from "express-validator";
 import { registerUser, loginUser } from "../controllers/authController.js";
+import {
+  forgotPassword,
+  resetPassword,
+} from "../controllers/authController.js";
 import handleValidationErrors from "../middleware/handleValidationErrors.js"; // If you have this as a separate file
 
 const router = express.Router();
@@ -41,4 +45,19 @@ router.post(
   handleValidationErrors,
   loginUser
 );
+
+router.post(
+  "/forgot-password",
+  [body("email").isEmail().withMessage("Valid email required")],
+  handleValidationErrors,
+  forgotPassword
+);
+
+router.post(
+  "/reset-password/:token",
+  [body("password").isLength({ min: 6 }).withMessage("Password too short")],
+  handleValidationErrors,
+  resetPassword
+);
+
 export default router;

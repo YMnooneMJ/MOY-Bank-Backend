@@ -65,9 +65,17 @@ const userSchema = new mongoose.Schema(
       },
     },
 
+    // For password reset
+    resetPasswordToken: {
+      type: String,
+    },
+    resetPasswordExpires: {
+      type: Date,
+    },
+
     avatar: {
       type: String,
-      default: "",
+      default: "", // or default image path
     },
 
     accountNumber: {
