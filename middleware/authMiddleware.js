@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import User from "../models/userModels.js";
+import User from "../models/User.js";
 
-const protect = async (req, res, next) => {
+export const protect = async (req, res, next) => {
   let token;
 
   // Check for Authorization header with Bearer token
@@ -37,5 +37,3 @@ const protect = async (req, res, next) => {
     });
   }
 };
-
-export default protect;

@@ -1,5 +1,5 @@
 import express from "express";
-import  protect  from "../middleware/authMiddleware.js";
+import { protect } from "../middleware/authMiddleware.js";
 import { body } from "express-validator";
 import handleValidationErrors from "../middleware/handleValidationErrors.js";
 import {

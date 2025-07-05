@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import User from "../models/userModels.js";
+import User from "../models/User.js";
 
 // Generate JWT Token
 const generateToken = (userId) => {
@@ -43,7 +43,7 @@ export const registerUser = async (req, res) => {
       password: hashedpassword,
       phoneNumber,
       accountNumber,
-      role: "user",
+      role: "user", // Always set to "user"
     });
 
     // Generate token
@@ -62,9 +62,9 @@ export const registerUser = async (req, res) => {
       token,
     });
   } catch (err) {
+    console.error(err); // Log full error on server
     res.status(500).json({
       message: "Registration failed",
-      error: err.message,
     });
   }
 };
@@ -80,8 +80,8 @@ export const loginUser = async (req, res) => {
     // Find user by email or username
     const user = await User.findOne({
       $or: [{ email: emailorUsername }, { username: emailorUsername }],
-    }).select("+password");
-    
+    }).select("+password +isActive");
+
     console.log("User found:", user);
 
     if (!user) {
@@ -91,6 +91,10 @@ export const loginUser = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch)
       return res.status(400).json({ message: "Invalid credentials" });
+
+    if (user && user.isActive === false) {
+      return res.status(403).json({ message: "Account is suspended." });
+    }
 
     const token = generateToken(user._id);
 

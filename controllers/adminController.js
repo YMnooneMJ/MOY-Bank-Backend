@@ -1,5 +1,5 @@
-import User from "../models/userModels.js";
-import Transaction from "../models/Transaction.js"; 
+import User from "../models/User.js";
+import Transaction from "../models/Transaction.js";
 
 // Get all users (Admin only)
 export const getAllUsers = async (req, res) => {
@@ -107,8 +107,12 @@ export const getAdminDashboardStats = async (req, res) => {
     ]);
 
     const totalTransactions = await Transaction.countDocuments();
-    const successfulTransactions = await Transaction.countDocuments({ status: "success" });
-    const failedTransactions = await Transaction.countDocuments({ status: "failed" });
+    const successfulTransactions = await Transaction.countDocuments({
+      status: "success",
+    });
+    const failedTransactions = await Transaction.countDocuments({
+      status: "failed",
+    });
 
     res.status(200).json({
       totalUsers,
@@ -126,4 +130,3 @@ export const getAdminDashboardStats = async (req, res) => {
     });
   }
 };
-

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import Transaction from "../models/Transaction.js";
-import User from "../models/userModels.js";
+import User from "../models/User.js";
 
 // Deposit Funds
 export const depositFunds = async (req, res) => {

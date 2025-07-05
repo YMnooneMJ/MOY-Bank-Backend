@@ -1,6 +1,6 @@
 import express from "express";
-import protect from "../middleware/authMiddleware.js";
-import isAdmin from "../middleware/isAdmin.js";
+import { protect } from "../middleware/authMiddleware.js";
+import { isAdmin } from "../middleware/isAdmin.js";
 import {
   getAllUsers,
   getAllTransactions,
