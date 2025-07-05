@@ -16,8 +16,11 @@ router.post(
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters"),
     body("phoneNumber")
-      .matches(/^\d{11,15}$/)
-      .withMessage("Phone number must be between 11 and 15 digits"),
+      .matches(/^\+?\d{11,15}$/)
+      .withMessage(
+        "Phone number must be 11 to 15 digits, with optional + and no spaces"
+      ),
+
     body("accountNumber")
       .matches(/^\d{10}$/)
       .withMessage("Account number must be 10 digits"),
