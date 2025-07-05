@@ -15,6 +15,7 @@ import adminRoutes from "./routes/adminRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
 import supportRoutes from "./routes/supportRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
+import passwordRoutes from "./routes/passwordRoutes.js";
 
 dotenv.config();
 
@@ -54,7 +55,7 @@ dbConnection();
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static("uploads")); 
 
 // Routes
 app.get("/", (req, res) => res.send("Welcome to MOY-Bank API"));
@@ -62,8 +63,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/transactions", transactionRoutes);
-app.use("/api/support", supportRoutes);
+app.use("/api/support", supportRoutes); 
 app.use("/api/chat", chatRoutes);
+app.use("/api/password", passwordRoutes);
 
 // 404 Handler
 app.use((req, res) => {

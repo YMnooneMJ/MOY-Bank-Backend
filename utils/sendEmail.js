@@ -1,8 +1,8 @@
 import nodemailer from "nodemailer";
 
-const sendEmail = async (to, subject, text) => {
+const sendEmail = async (to, subject, html) => {
   const transporter = nodemailer.createTransport({
-    service: "gmail", // or use your email service
+    service: "Gmail", // or use SendGrid, Mailgun, etc.
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
@@ -13,7 +13,7 @@ const sendEmail = async (to, subject, text) => {
     from: `"MOY-Bank" <${process.env.EMAIL_USER}>`,
     to,
     subject,
-    text,
+    html,
   });
 };
 
