@@ -1,4 +1,3 @@
-// routes/supportRoutes.js
 import express from "express";
 import { getSupportInbox } from "../controllers/supportController.js";
 import { protect, isAdmin } from "../middleware/authMiddleware.js";
