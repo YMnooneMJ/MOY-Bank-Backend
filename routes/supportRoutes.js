@@ -1,15 +1,11 @@
+// routes/supportRoutes.js
 import express from "express";
-import ChatMessage from "../models/ChatMessage.js";
+import { getSupportInbox } from "../controllers/supportController.js";
+import { protect, isAdmin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/messages/:userId", async (req, res) => {
-  try {
-    const messages = await ChatMessage.find({ userId: req.params.userId }).sort("createdAt");
-    res.json(messages);
-  } catch (err) {
-    res.status(500).json({ message: "Failed to load messages" });
-  }
-});
+// Admin-only: get inbox with users who've chatted
+router.get("/inbox", protect, isAdmin, getSupportInbox);
 
 export default router;
